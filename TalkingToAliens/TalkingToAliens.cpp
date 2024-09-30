@@ -1,9 +1,11 @@
 #include<iostream>
 using namespace std;
 
+const string conversion = "0123456789abcdefghijklmnopqrstuvwxyz";
+
 class Node {
     public:
-        int value;
+        char value;
         Node* next;
 };
 
@@ -24,25 +26,20 @@ void solve(int x, int y){
 
 void pushNode(int n){
     Node* node = new Node();
-    node->value = n;
-    if (head == NULL) head = node;
-    else{
-        Node *temp = head;
-        while (temp->next != NULL) temp = temp->next;
-        temp->next = node;
-    }
+    node->value = conversion[n];
+    node->next = head;
+    head = node;
 }
 
 void displayResult(){
-    while (head != NULL){
-        Node *temp = head;
-        while (temp->next != NULL) temp = temp->next;
+    Node *temp = head;
+    while (temp != NULL){
         cout << temp->value;
-        Node *temp2 = head;
-        while (temp2->next != temp) temp2 = temp2->next;
-        delete temp;
-        temp2->next = NULL;
+        Node* current = temp;
+        temp = temp->next;
+        delete current;
     }
+    head = NULL;
 }
 
 int main(){
