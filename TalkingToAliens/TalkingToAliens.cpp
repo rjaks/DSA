@@ -5,7 +5,7 @@ const string conversion = "0123456789abcdefghijklmnopqrstuvwxyz";
 
 class Node {
     public:
-        char value;
+        int value;
         Node* next;
 };
 
@@ -26,7 +26,7 @@ void solve(int x, int y){
 
 void pushNode(int n){
     Node* node = new Node();
-    node->value = conversion[n];
+    node->value = n;
     node->next = head;
     head = node;
 }
@@ -34,7 +34,7 @@ void pushNode(int n){
 void displayResult(){
     Node *temp = head;
     while (temp != NULL){
-        cout << temp->value;
+        cout << conversion[temp->value];
         Node* current = temp;
         temp = temp->next;
         delete current;
