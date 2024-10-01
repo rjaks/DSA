@@ -5,13 +5,13 @@ using namespace std;
 const string numbers = "0123456789";
 const string operators = "+-*/^";
 const string parantheses = "()";
-bool isNumber, isOperator, isParanthesis;
+bool isNumber, isOperator, isParanthesis, validOperation;
 vector<char> op;
+char parOp;
 string output = "";
 
 void solve(string);
 void check(char);
-void push(char);
 void pop();
 void display();
 
@@ -20,15 +20,21 @@ void display();
 
 void solve(string C){
     for (int i = 0; i < C.length(); i++){
-        isNumber = false, isOperator = false, isParanthesis = false;
+        isNumber = false, isOperator = false, isParanthesis = false, validOperation = true;
         check(C[i]);
-        
-        if (isNumber) output += C[i];
-        else if (isNumber && op.size() > 0) {
-            output += C[i];
-            pop();
+
+        if (isOperator) {
+            if (C[i+2] == '(') char parOp = C[i];
+            op.push_back(C[i]);
         }
-        else if (isOperator) op.push_back(C[i]);
+        else if (isNumber) {
+            if (op.size() > 0){
+                output += C[i];
+                pop();
+            }
+            else output += C[i];
+        }   
+        else continue;
     }
 }
 
