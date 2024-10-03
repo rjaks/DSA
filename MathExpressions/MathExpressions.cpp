@@ -1,75 +1,62 @@
-#include<iostream>
-#include<vector>
+#include <iostream>
+#include <vector>
 using namespace std;
 
+const string paranthesis = "()";
+const string operators = "+-*/";
 const string numbers = "0123456789";
-const string operators = "+-*/^";
-const string parantheses = "()";
-bool isNumber, isOperator, isParanthesis, validOperation;
-vector<char> op;
-char parOp;
-string output = "";
+vector<char> stack;
 
-void solve(string);
-void check(char);
+// self-explanatory(?) defined functions
+bool isOperator(char);
+bool isNumber(char);
+bool isParanthesis(char);
+void push(char);
 void pop();
-void display();
+int precedence(char c);
 
-// 5 + 7 - (5 * 3) / 8
-// 5 7 + 5 3 * - 8 /
+// getters and setters
+bool isOperator(char c) { return operators.find(c) != string::npos; }
+bool isNumber(char c) { return numbers.find(c) != string::npos; }
+bool isParanthesis(char c) { return paranthesis.find(c) != string::npos; }
+bool isLeftParanthesis(char c){ return c == '('; }
+bool isRightParanthesis(char c){ return c == ')'; }
+void push(char c){ stack.insert(stack.begin(), c); }
+void pop(){ stack.erase(stack.begin()); }
 
-void solve(string C){
-    for (int i = 0; i < C.length(); i++){
-        isNumber = false, isOperator = false, isParanthesis = false, validOperation = true;
-        check(C[i]);
+string solve(string expression){
+    string infix, postfix;
+    for (char k : expression) {
+        if (k != ' ') infix += k; 
+    }
 
-        if (isOperator) {
-            if (C[i+2] == '(') char parOp = C[i];
-            op.push_back(C[i]);
-        }
-        else if (isNumber) {
-            if (op.size() > 0){
-                output += C[i];
+    for (char j : infix){
+        if (isNumber) postfix += j;
+        else if (isLeftParanthesis) push(j);
+        else if (isRightParanthesis) {
+            while (stack.empty() == false && stack[0] != ')') {
+                postfix += stack[0];
                 pop();
             }
-            else output += C[i];
-        }   
-        else continue;
+            pop(); // pops the left paranthesis
+        }
+        else if (isOperator){
+            while (stack.empty() == false && precedence(stack[0]) >= precedence(j)){
+
+            }
+        }
     }
 }
 
-void check(char c){
-    for (char k : numbers){
-        if (k == c) { isNumber = true; break; }
-    }
-    for (char k : operators){
-        if (k == c) { isOperator = true; break; }
-    }
-    for (char k : parantheses){
-        if (k == c) { isParanthesis = true; break; }
-    }
-}
-
-void pop(){
-    output += op[0];
-    op.erase(op.begin());
-}
-
-void display(){
-    for (char k: output) cout << k << " ";
-}
-
-int main(){
+int main() {
     int E;
     cin >> E;
+    string expression;
 
-    for (int i = 0; i < E; i++){
-        string C;
+    for (int i = 0; i < E; i++) {
         cin.ignore();
-        getline(cin, C);
-        solve(C);
-        display();
+        getline(cin, expression); 
+        cout << solve(expression);
     }
-
     return 0;
 }
