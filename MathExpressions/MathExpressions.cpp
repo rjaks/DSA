@@ -68,7 +68,7 @@ bool checkValidity(string expression){
     }
 
     if (!leftParanthesisExist && !rightParanthesisExist && operatorCounter == 0) return true;
-    
+    else return false;    
 }
 
 string solve(string infixExpression){
