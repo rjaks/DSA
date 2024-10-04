@@ -1,13 +1,13 @@
 #include <iostream>
-#include <sstream>
 #include <string>
 #include <vector>
+#include <cstdio>
 using namespace std;
 
 const string operators = "+-*/";
 const string numbers = "0123456789";
 vector<char> stack;
-int total;
+int total = 0;
 
 // self-explanatory(?) defined functions
 string solve(string);
@@ -37,15 +37,19 @@ int precedence(char c){
 
 // Unsolved: Needs revision
 // ISSUE: Incorrect output
-void getTotal(string result){ 
-    istringstream iss(result);
-    int value = 0;
-    char op = '+';
-    while (iss >> value){
-        if (op == '+') total += value;
-        else if (op == '-') total -= value;
-        else if (op == '*') total *= value;
-        else if (op == '/') total /= value;
+void getTotal(string postfix){
+    vector<int> stack; 
+    for (char k : postfix){
+        if (k == '+' || k == '-' || k == '*' || k == '/'){
+            int val1 = stack.back(); stack.pop_back();
+            int val2 = stack.back(); stack.pop_back();
+            if ( k == '+') total = val1 + val2;
+            else if (k == '-') total = val2 - val1;
+            else if (k == '*') total = val1 * val2;
+            else if (k == '/') total = val1 / val2;
+            stack.push_back(total);
+        }
+        else stack.push_back(k - '0'); 
     }
 }
 
@@ -81,7 +85,7 @@ string solve(string infixExpression){
         result += ' ';
     }
     
-    getTotal(infixExpression);
+    getTotal(postfix);
 
     return result + "= " + to_string(total);
 }
