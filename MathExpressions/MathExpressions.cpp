@@ -8,6 +8,7 @@ const string operators = "+-*/";
 const string numbers = "0123456789";
 vector<char> stack;
 int total = 0;
+bool validExpression;
 
 // self-explanatory(?) defined functions
 string solve(string);
@@ -19,6 +20,7 @@ void push(char);
 void pop();
 int precedence(char);
 void getTotal(string);
+bool checkValidity(string);
 
 // boolean evaluators and stack functions
 // internet's jargons: string::npos means until the end of string; the functions return false if they find no match
@@ -35,8 +37,6 @@ int precedence(char c){
     else return 0;
 }
 
-// Unsolved: Needs revision
-// ISSUE: Incorrect output
 void getTotal(string postfix){
     vector<int> stack; 
     for (char k : postfix){
@@ -53,8 +53,29 @@ void getTotal(string postfix){
     }
 }
 
+bool checkValidity(string expression){
+    if (isOperator(expression.back()) || isLeftParanthesis(expression.back()) || isRightParanthesis(expression.back())) return false;
+    bool leftParanthesisExist = false, rightParanthesisExist = false;
+    int operatorCounter = 0;
+
+    for (char k : expression){
+        if (isNumber(k)){
+            if (operatorCounter == 1) operatorCounter--;
+        }
+        else if (isOperator(k)) operatorCounter++;
+        else if (isLeftParanthesis(k)) leftParanthesisExist = true;
+        else if (isRightParanthesis(k) && leftParanthesisExist) leftParanthesisExist = false;
+    }
+
+    if (!leftParanthesisExist && !rightParanthesisExist && operatorCounter == 0) return true;
+    
+}
+
 string solve(string infixExpression){
     string postfix, result;
+    validExpression = false;
+
+    if (checkValidity(infixExpression) == false) return "INCORRECT MATH EXPRESSION";
 
     for (char j : infixExpression){ 
         if (isNumber(j)) postfix += j;
