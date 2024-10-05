@@ -7,8 +7,9 @@ vector<string> regular;
 
 void solve(){
     int rank; string command, name;
-    cin >> command >> rank >> name;
+    cin >> command;
     if (command == "COME"){
+        cin >> rank >> name;
         if (rank == 1){
             vip.insert(regular.begin(), name);
         }
