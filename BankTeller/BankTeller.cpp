@@ -11,12 +11,10 @@ void solve(){
     if (command == "COME"){
         cin >> rank >> name;
         if (rank == 1){
-            if (vip.size() == 0) vip.push_back(name);
-            else vip.insert(regular.begin(), name);
+            vip.push_back(name);
         }
         else if (rank == 2){
-            if (regular.size() == 0) regular.push_back(name);
-            else regular.insert(regular.begin(), name);
+            regular.push_back(name);
         }
     }
     else if (command == "SERVE"){
